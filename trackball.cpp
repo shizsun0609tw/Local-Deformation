@@ -406,7 +406,7 @@ void Deform_3_feature(vector4 &w, float sigma)
     {
         if (featureList[i] == selectedFeature) { selectedFeatureNumber = i; }
     }
-
+    
     w[0] = psi_inverse[selectedFeatureNumber][0];
     w[1] = psi_inverse[selectedFeatureNumber][1];
     w[2] = psi_inverse[selectedFeatureNumber][2];
@@ -461,20 +461,17 @@ void UpdateMesh(vector4 w, float sigma, vector3 vec)
 
         for (int j = 0; j < featureList.size(); ++j)
         {
+            //if (featureList[j] != selectedFeature) continue;
             vector3 p (originMesh->vertices[3 * i              + 0], originMesh->vertices[3 * i              + 1], originMesh->vertices[3 * i              + 2]);
             vector3 pi(originMesh->vertices[3 * featureList[j] + 0], originMesh->vertices[3 * featureList[j] + 1], originMesh->vertices[3 * featureList[j] + 2]);
-            vector3 vi(
-                mesh->vertices[3 * featureList[j] + 0] - originMesh->vertices[3 * featureList[j] + 0],
-                mesh->vertices[3 * featureList[j] + 1] - originMesh->vertices[3 * featureList[j] + 1],
-                mesh->vertices[3 * featureList[j] + 2] - originMesh->vertices[3 * featureList[j] + 2]);
-            float r = (p - pi).length();
+            vector3 vi = vec;
 
-            vi = vec;
+            float r = (p - pi).length();
 
             d.x += w[j] * Psi(r, sigma) * vi.x;
             d.y += w[j] * Psi(r, sigma) * vi.y;
             d.z += w[j] * Psi(r, sigma) * vi.z;
-        }
+        }        
 
         mesh->vertices[3 * i + 0] += d.x;
         mesh->vertices[3 * i + 1] += d.y;
